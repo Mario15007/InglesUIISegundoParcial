@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Verbs & Collocations - English Exam</title>
+    <style>
+        :root {
+            --bg: #f5f0eb;
+            --card-bg: #ffffff;
+            --text: #2c2c2c;
+            --accent: #4a6fa5;
+            --accent-hover: #3b5a8c;
+            --correct: #2d7d46;
+            --incorrect: #c0392b;
+            --border: #dcd3c6;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+            --radius: 10px;
+            --transition: 0.2s ease;
+            --font: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            font-family: var(--font);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .exam-header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .exam-header h1 {
+            font-size: 1.9rem;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+        .exam-header .subtitle {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 500;
+        }
+        .exam-header .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 14px;
+        }
+        .exam-header .topic-tag {
+            background: #eef3fa;
+            color: var(--accent);
+            padding: 5px 13px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Score bar */
+        .score-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 14px 24px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .score-display {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .score-display span {
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+        .btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition);
+            letter-spacing: 0.2px;
+        }
+        .btn-submit {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-submit:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(74, 111, 165, 0.3);
+        }
+        .btn-reset {
+            background: #fff;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+        .btn-reset:hover {
+            background: #eef3fa;
+        }
+
+        /* Section */
+        .section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px 28px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section h2 .section-num {
+            background: var(--accent);
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .section .instructions {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        /* Question */
+        .question {
+            margin-bottom: 18px;
+            padding: 14px 16px;
+            border-radius: 8px;
+            background: #fafaf8;
+            border-left: 4px solid transparent;
+            transition: var(--transition);
+        }
+        .question.correct-flash {
+            border-left-color: var(--correct);
+            background: #f2faf4;
+        }
+        .question.incorrect-flash {
+            border-left-color: var(--incorrect);
+            background: #fef5f5;
+        }
+        .question .q-text {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        .question .q-text .q-num {
+            color: var(--accent);
+            margin-right: 4px;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+        .options label:hover {
+            background: #eef3fa;
+        }
+        .options input[type="radio"] {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .feedback {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 6px;
+            display: none;
+        }
+        .feedback.show {
+            display: block;
+        }
+        .feedback.correct {
+            color: var(--correct);
+        }
+        .feedback.incorrect {
+            color: var(--incorrect);
+        }
+
+        /* Fill in blank */
+        .fill-blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px dashed #aaa;
+            padding: 2px 6px;
+            margin: 0 4px;
+            font-weight: 600;
+            color: var(--accent);
+            transition: var(--transition);
+        }
+        .fill-blank.correct-blank {
+            border-bottom-color: var(--correct);
+            color: var(--correct);
+            background: #eafaf0;
+            border-radius: 3px;
+        }
+        .fill-blank.incorrect-blank {
+            border-bottom-color: var(--incorrect);
+            color: var(--incorrect);
+            background: #fef0f0;
+            border-radius: 3px;
+        }
+
+        /* Result modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: #fff;
+            border-radius: 14px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        .modal h3 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+        .modal .big-score {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .modal .msg {
+            color: #555;
+            margin: 10px 0 20px;
+        }
+        .modal .btn {
+            margin: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .exam-header h1 {
+                font-size: 1.4rem;
+            }
+            .section {
+                padding: 16px 12px;
+            }
+            .options {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .score-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="exam-header">
+            <h1>📝 Modal Verbs & Collocations Exam</h1>
+            <p class="subtitle">English Grammar Assessment — Second Partial</p>
+            <div class="topics">
+                <span class="topic-tag">Must / Have to</span>
+                <span class="topic-tag">Should / Ought to</span>
+                <span class="topic-tag">Can / Could</span>
+                <span class="topic-tag">May / Might</span>
+                <span class="topic-tag">Be able to</span>
+                <span class="topic-tag">Permission & Requests</span>
+                <span class="topic-tag">Collocations</span>
+            </div>
+        </div>
+
+        <!-- Score Bar -->
+        <div class="score-bar">
+            <div class="score-display">📊 Score: <span id="liveScore">0</span> / <span id="totalQuestions">0</span></div>
+            <div>
+                <button class="btn btn-submit" onclick="submitExam()">✅ Submit Exam</button>
+                <button class="btn btn-reset" onclick="resetExam()">🔄 Reset All</button>
+            </div>
+        </div>
+
+        <!-- SECTION 1: Must vs Have to -->
+        <div class="section" id="sec1">
+            <h2><span class="section-num">1</span> Must, Have to & Need to</h2>
+            <p class="instructions">Choose the best option. Remember: <em>must</em> = personal obligation (speaker's feeling); <em>have to</em> = external obligation (rules/situation).</p>
+            <div id="questionsPart1"></div>
+        </div>
+
+        <!-- SECTION 2: Should, Ought to, Had better -->
+        <div class="section" id="sec2">
+            <h2><span class="section-num">2</span> Should, Ought to & Had Better</h2>
+            <p class="instructions">Choose the best modal for advice or opinion. Remember: <em>had better</em> often implies a consequence.</p>
+            <div id="questionsPart2"></div>
+        </div>
+
+        <!-- SECTION 3: Can, Could, May, Might (Possibility) -->
+        <div class="section" id="sec3">
+            <h2><span class="section-num">3</span> Can, Could, May, Might — Possibility</h2>
+            <p class="instructions">Choose the correct modal to express possibility in the present or past.</p>
+            <div id="questionsPart3"></div>
+        </div>
+
+        <!-- SECTION 4: Permission, Requests & Offers -->
+        <div class="section" id="sec4">
+            <h2><span class="section-num">4</span> Permission, Requests & Offers</h2>
+            <p class="instructions">Choose the most appropriate modal for each situation.</p>
+            <div id="questionsPart4"></div>
+        </div>
+
+        <!-- SECTION 5: Be able to & Mixed Modals -->
+        <div class="section" id="sec5">
+            <h2><span class="section-num">5</span> Be able to & Mixed Modal Verbs</h2>
+            <p class="instructions">Complete with the correct form. Remember: <em>be able to</em> is used for all tenses; <em>can/could</em> have limited forms.</p>
+            <div id="questionsPart5"></div>
+        </div>
+
+        <!-- SECTION 6: Collocations -->
+        <div class="section" id="sec6">
+            <h2><span class="section-num">6</span> Verb + Noun Collocations</h2>
+            <p class="instructions">Choose the verb that best collocates with the noun.</p>
+            <div id="questionsPart6"></div>
+        </div>
+
+        <!-- Bottom buttons -->
+        <div class="score-bar" style="margin-top:8px;">
+            <div class="score-display">📊 Score: <span id="liveScore2">0</span> / <span id="totalQuestions2">0</span></div>
+            <div>
+                <button class="btn btn-submit" onclick="submitExam()">✅ Submit Exam</button>
+                <button class="btn btn-reset" onclick="resetExam()">🔄 Reset All</button>
+            </div>
+        </div>
+
+        <!-- Result Modal -->
+        <div class="modal-overlay" id="resultModal">
+            <div class="modal">
+                <h3>🎉 Exam Submitted!</h3>
+                <div class="big-score" id="finalScore">0</div>
+                <p style="font-size:1.1rem;font-weight:600;" id="finalPercentage"></p>
+                <p class="msg" id="finalMsg"></p>
+                <button class="btn btn-submit" onclick="closeModal()">🔍 Review Answers</button>
+                <button class="btn btn-reset" onclick="resetExam();closeModal();">🔄 Retake Exam</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== QUESTION DATA ==========
+        // Each question: { id, text, type: 'mc'|'fill', options: [...], correct, section, explanation }
+        const allQuestions = [
+            // SECTION 1: Must vs Have to (8 questions)
+            {
+                id: 'q1',
+                section: 1,
+                type: 'mc',
+                text: 'At our school, we ______ wear a uniform every day.',
+                options: ['must', 'have to', 'must to', 'has to'],
+                correct: 1,
+                explanation: 'We use <em>have to</em> when the situation (official rules) makes something necessary.'
+            }, {
+                id: 'q2',
+                section: 1,
+                type: 'mc',
+                text: 'You really ______ stop working so hard and go on vacation!',
+                options: ['have to', 'must', 'has to', 'don\'t have to'],
+                correct: 1,
+                explanation: 'We use <em>must</em> when the speaker personally feels something is important.'
+            }, {
+                id: 'q3',
+                section: 1,
+                type: 'mc',
+                text: 'You ______ turn on your cell phone when the plane is taking off. It\'s prohibited.',
+                options: ['mustn\'t', 'don\'t have to', 'must', 'have to'],
+                correct: 0,
+                explanation: '<em>Mustn\'t</em> describes an action that is prohibited/forbidden.'
+            }, {
+                id: 'q4',
+                section: 1,
+                type: 'mc',
+                text: 'You ______ turn on the heating system. It\'s automatic.',
+                options: ['mustn\'t', 'don\'t have to', 'must', 'have to'],
+                correct: 1,
+                explanation: '<em>Don\'t have to</em> means it is not necessary — you have a choice.'
+            }, {
+                id: 'q5',
+                section: 1,
+                type: 'mc',
+                text: 'To take an examination, students ______ be in the classroom on time.',
+                options: ['must', 'have to', 'mustn\'t', 'don\'t have to'],
+                correct: 1,
+                explanation: 'Official rule → <em>have to</em> expresses facts, not personal feelings.'
+            }, {
+                id: 'q6',
+                section: 1,
+                type: 'mc',
+                text: 'I ______ finish my homework before 8:00 or my parents will be angry.',
+                options: ['must', 'have to', 'mustn\'t', 'don\'t have to'],
+                correct: 0,
+                explanation: 'Personal obligation felt by the speaker → <em>must</em>.'
+            }, {
+                id: 'q7',
+                section: 1,
+                type: 'mc',
+                text: 'You ______ combine sleeping pills with alcohol. It\'s dangerous!',
+                options: ['mustn\'t', 'don\'t have to', 'must', 'have to'],
+                correct: 0,
+                explanation: 'Prohibition / strong warning → <em>mustn\'t</em>.'
+            }, {
+                id: 'q8',
+                section: 1,
+                type: 'mc',
+                text: 'We ______ be here by 8:00 or the plane will leave without us.',
+                options: ['have to', 'must', 'don\'t have to', 'mustn\'t'],
+                correct: 1,
+                explanation: 'Speaker feels it is critically important → <em>must</em>.'
+            },
+
+            // SECTION 2: Should, Ought to, Had better (6 questions)
+            {
+                id: 'q9',
+                section: 2,
+                type: 'mc',
+                text: 'You ______ go and see your grandmother once a week.',
+                options: ['should', 'ought', 'had better to', 'must to'],
+                correct: 0,
+                explanation: '<em>Should</em> is used to give advice or express what we think is correct.'
+            }, {
+                id: 'q10',
+                section: 2,
+                type: 'mc',
+                text: 'You ______ study and give in all your activities or else you won\'t pass this semester.',
+                options: ['should', 'ought to', 'had better', 'must'],
+                correct: 2,
+                explanation: '<em>Had better</em> expresses a consequence if the advice is not followed.'
+            }, {
+                id: 'q11',
+                section: 2,
+                type: 'mc',
+                text: 'With this temperature, you ______ visit the doctor. (formal context)',
+                options: ['should', 'ought to', 'had better', 'must'],
+                correct: 1,
+                explanation: '<em>Ought to</em> is more formal and less common than <em>should</em>.'
+            }, {
+                id: 'q12',
+                section: 2,
+                type: 'mc',
+                text: 'They ______ take that train; it doesn\'t stop in Madrid.',
+                options: ['shouldn\'t', 'ought not to', 'had better not', 'All of the above'],
+                correct: 3,
+                explanation: 'All three forms can express negative advice.'
+            }, {
+                id: 'q13',
+                section: 2,
+                type: 'mc',
+                text: 'You ______ spend so much money. (formal)',
+                options: ['shouldn\'t', 'ought not to', 'had better not', 'mustn\'t'],
+                correct: 1,
+                explanation: '<em>Ought not to</em> is the formal negative form.'
+            }, {
+                id: 'q14',
+                section: 2,
+                type: 'mc',
+                text: '______ I tell him the truth?',
+                options: ['Should', 'Ought', 'Had better', 'Must'],
+                correct: 0,
+                explanation: '<em>Should</em> is the most common option for questions.'
+            },
+
+            // SECTION 3: Can, Could, May, Might — Possibility (6 questions)
+            {
+                id: 'q15',
+                section: 3,
+                type: 'mc',
+                text: 'Dogs ______ be difficult to train. (general possibility)',
+                options: ['can', 'may', 'might', 'must'],
+                correct: 0,
+                explanation: '<em>Can</em> is used for general possibility.'
+            }, {
+                id: 'q16',
+                section: 3,
+                type: 'mc',
+                text: 'John ______ have beaten you in the race. (past possibility)',
+                options: ['can', 'could', 'must', 'should'],
+                correct: 1,
+                explanation: '<em>Could have + past participle</em> expresses possibility in the past.'
+            }, {
+                id: 'q17',
+                section: 3,
+                type: 'mc',
+                text: 'It ______ rain in the desert today. (uncertain belief)',
+                options: ['can', 'may', 'must', 'should'],
+                correct: 1,
+                explanation: '<em>May</em> expresses uncertain possibility.'
+            }, {
+                id: 'q18',
+                section: 3,
+                type: 'mc',
+                text: 'John ______ have finished already. (past possibility with <em>might</em>)',
+                options: ['might', 'can', 'should', 'must'],
+                correct: 0,
+                explanation: '<em>Might have + past participle</em> expresses past possibility.'
+            }, {
+                id: 'q19',
+                section: 3,
+                type: 'mc',
+                text: 'She seemed genuinely surprised, so she ______ have known about the party.',
+                options: ['must', 'couldn\'t', 'might', 'should'],
+                correct: 1,
+                explanation: '<em>Couldn\'t have</em> expresses impossibility in the past.'
+            }, {
+                id: 'q20',
+                section: 3,
+                type: 'mc',
+                text: 'I\'m not sure. She ______ be late because of the public transport strike.',
+                options: ['can', 'might', 'must', 'should'],
+                correct: 1,
+                explanation: '<em>Might</em> is more frequent than <em>may</em> in spoken English for possibility.'
+            },
+
+            // SECTION 4: Permission, Requests & Offers (6 questions)
+            {
+                id: 'q21',
+                section: 4,
+                type: 'mc',
+                text: '______ I borrow your dictionary, please? (polite request)',
+                options: ['Can', 'Could', 'May', 'All of the above'],
+                correct: 3,
+                explanation: 'All three can be used. <em>May</em> is most formal, <em>could</em> is polite, <em>can</em> is casual.'
+            }, {
+                id: 'q22',
+                section: 4,
+                type: 'mc',
+                text: '______ you like some coffee? (polite offer)',
+                options: ['Can', 'Would', 'May', 'Could'],
+                correct: 1,
+                explanation: '<em>Would you like...</em> is the standard polite offer form.'
+            }, {
+                id: 'q23',
+                section: 4,
+                type: 'mc',
+                text: '______ I help you? (polite offer, formal)',
+                options: ['Can', 'Will', 'May', 'Would'],
+                correct: 2,
+                explanation: '<em>May I help you?</em> is a very polite, formal offer.'
+            }, {
+                id: 'q24',
+                section: 4,
+                type: 'mc',
+                text: 'You ______ use my umbrella; I don\'t need it right now. (giving permission)',
+                options: ['can', 'must', 'should', 'would'],
+                correct: 0,
+                explanation: '<em>Can</em> is used to give permission.'
+            }, {
+                id: 'q25',
+                section: 4,
+                type: 'mc',
+                text: 'You ______ smoke anywhere on the train. (prohibition)',
+                options: ['cannot', 'might not', 'should not', 'would not'],
+                correct: 0,
+                explanation: '<em>Cannot</em> expresses prohibition.'
+            }, {
+                id: 'q26',
+                section: 4,
+                type: 'mc',
+                text: '______ you turn the heating up a bit, please? (polite request)',
+                options: ['Could', 'May', 'Must', 'Should'],
+                correct: 0,
+                explanation: '<em>Could</em> is commonly used for polite requests.'
+            },
+
+            // SECTION 5: Be able to & Mixed (6 questions)
+            {
+                id: 'q27',
+                section: 5,
+                type: 'mc',
+                text: 'She fell into the river, but fortunately the firefighters ______ rescue her.',
+                options: ['were able to', 'could', 'managed to', 'Both A and C'],
+                correct: 3,
+                explanation: 'For a specific situation in the past, use <em>was/were able to</em> or <em>managed to</em>, NOT <em>could</em>.'
+            }, {
+                id: 'q28',
+                section: 5,
+                type: 'mc',
+                text: 'I\'ve never ______ speak Spanish as well as my brother. (present perfect)',
+                options: ['could', 'been able to', 'can', 'managed to'],
+                correct: 1,
+                explanation: '<em>Can</em> has only present and past forms. Use <em>be able to</em> for present perfect.'
+            }, {
+                id: 'q29',
+                section: 5,
+                type: 'mc',
+                text: 'I hate not ______ understand my French neighbours. (gerund needed)',
+                options: ['can', 'being able to', 'could', 'able to'],
+                correct: 1,
+                explanation: 'Gerund form needed → <em>being able to</em>.'
+            }, {
+                id: 'q30',
+                section: 5,
+                type: 'mc',
+                text: 'When he was 40, he ______ speak six languages. (general past ability)',
+                options: ['could', 'was able to', 'managed to', 'Both A and B'],
+                correct: 3,
+                explanation: 'For general past ability, both <em>could</em> and <em>was/were able to</em> are correct.'
+            }, {
+                id: 'q31',
+                section: 5,
+                type: 'mc',
+                text: 'I\'m free tonight, so I\'ll ______ come and help you. (future)',
+                options: ['can', 'could', 'be able to', 'managed to'],
+                correct: 2,
+                explanation: '<em>Will</em> is a modal verb; after it we need infinitive. <em>Can</em> has no future form → use <em>be able to</em>.'
+            }, {
+                id: 'q32',
+                section: 5,
+                type: 'mc',
+                text: 'I haven\'t ______ sleep very well lately. (present perfect negative)',
+                options: ['could', 'been able to', 'can', 'managed to'],
+                correct: 1,
+                explanation: 'Present perfect → <em>haven\'t been able to</em>.'
+            },
+
+            // SECTION 6: Collocations (8 questions)
+            {
+                id: 'q33',
+                section: 6,
+                type: 'mc',
+                text: 'I always try to ______ my homework in the morning.',
+                options: ['make', 'do', 'take', 'have'],
+                correct: 1,
+                explanation: 'The correct collocation is <em>do homework</em>.'
+            }, {
+                id: 'q34',
+                section: 6,
+                type: 'mc',
+                text: 'He has been asked to ______ a presentation about his work.',
+                options: ['make', 'do', 'give', 'take'],
+                correct: 2,
+                explanation: 'The correct collocation is <em>give a presentation</em>.'
+            }, {
+                id: 'q35',
+                section: 6,
+                type: 'mc',
+                text: 'The prisoner was hanged for ______ murder.',
+                options: ['making', 'doing', 'committing', 'taking'],
+                correct: 2,
+                explanation: 'The correct collocation is <em>commit murder</em>.'
+            }, {
+                id: 'q36',
+                section: 6,
+                type: 'mc',
+                text: 'Let\'s give Mr. Jones a ______ of applause.',
+                options: ['round', 'circle', 'clap', 'sound'],
+                correct: 0,
+                explanation: 'The correct collocation is <em>a round of applause</em>.'
+            }, {
+                id: 'q37',
+                section: 6,
+                type: 'mc',
+                text: 'I need to ______ a decision before the meeting.',
+                options: ['do', 'make', 'take', 'give'],
+                correct: 1,
+                explanation: 'The correct collocation is <em>make a decision</em>.'
+            }, {
+                id: 'q38',
+                section: 6,
+                type: 'mc',
+                text: 'Could you ______ a look at my essay?',
+                options: ['make', 'do', 'take', 'give'],
+                correct: 2,
+                explanation: 'The correct collocation is <em>take a look</em>.'
+            }, {
+                id: 'q39',
+                section: 6,
+                type: 'mc',
+                text: 'We had to return home because we had ______ out of money.',
+                options: ['run', 'gone', 'taken', 'made'],
+                correct: 0,
+                explanation: 'The correct collocation is <em>run out of money</em>.'
+            }, {
+                id: 'q40',
+                section: 6,
+                type: 'mc',
+                text: 'At first her eyes filled with horror, and then she ______ into tears.',
+                options: ['broke', 'burst', 'exploded', 'fell'],
+                correct: 1,
+                explanation: 'The correct collocation is <em>burst into tears</em>.'
+            }
+        ];
+
+        // ========== RENDER QUESTIONS ==========
+        const sectionContainers = {
+            1: 'questionsPart1',
+            2: 'questionsPart2',
+            3: 'questionsPart3',
+            4: 'questionsPart4',
+            5: 'questionsPart5',
+            6: 'questionsPart6'
+        };
+
+        function renderAllQuestions() {
+            // Clear all containers
+            Object.values(sectionContainers).forEach(id => {
+                document.getElementById(id).innerHTML = '';
+            });
+
+            allQuestions.forEach((q, index) => {
+                const containerId = sectionContainers[q.section];
+                const container = document.getElementById(containerId);
+                const displayNum = index + 1;
+
+                const qDiv = document.createElement('div');
+                qDiv.className = 'question';
+                qDiv.id = `question-${q.id}`;
+                qDiv.setAttribute('data-qid', q.id);
+
+                let html = `<div class="q-text"><span class="q-num">${displayNum}.</span> ${q.text}</div>`;
+
+                if (q.type === 'mc') {
+                    html += '<div class="options">';
+                    q.options.forEach((opt, optIndex) => {
+                        const letter = String.fromCharCode(65 + optIndex); // A, B, C, D
+                        html += `
+                            <label>
+                                <input type="radio" name="${q.id}" value="${optIndex}" onchange="clearFlash('${q.id}')">
+                                <strong>${letter}.</strong> ${opt}
+                            </label>`;
+                    });
+                    html += '</div>';
+                    html +=
+                        `<div class="feedback" id="fb-${q.id}"><span id="fb-text-${q.id}"></span> <span style="font-weight:400;color:#666;" id="fb-explanation-${q.id}"></span></div>`;
+                }
+
+                qDiv.innerHTML = html;
+                container.appendChild(qDiv);
+            });
+
+            updateTotalCount();
+        }
+
+        function updateTotalCount() {
+            const total = allQuestions.length;
+            document.getElementById('totalQuestions').textContent = total;
+            document.getElementById('totalQuestions2').textContent = total;
+            document.getElementById('liveScore').textContent = '0';
+            document.getElementById('liveScore2').textContent = '0';
+        }
+
+        function clearFlash(qid) {
+            const qDiv = document.getElementById(`question-${qid}`);
+            if (qDiv) {
+                qDiv.classList.remove('correct-flash', 'incorrect-flash');
+            }
+            const fb = document.getElementById(`fb-${qid}`);
+            if (fb) {
+                fb.classList.remove('show', 'correct', 'incorrect');
+            }
+        }
+
+        // ========== SUBMIT & SCORE ==========
+        function submitExam() {
+            let score = 0;
+            const total = allQuestions.length;
+
+            allQuestions.forEach(q => {
+                const qDiv = document.getElementById(`question-${q.id}`);
+                const fb = document.getElementById(`fb-${q.id}`);
+                const fbText = document.getElementById(`fb-text-${q.id}`);
+                const fbExplanation = document.getElementById(`fb-explanation-${q.id}`);
+
+                if (q.type === 'mc') {
+                    const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+                    if (selected && parseInt(selected.value) === q.correct) {
+                        score++;
+                        if (qDiv) qDiv.classList.add('correct-flash');
+                        if (fb) {
+                            fb.classList.add('show', 'correct');
+                            if (fbText) fbText.textContent = '✅ Correct!';
+                            if (fbExplanation) fbExplanation.innerHTML = ' ' + q.explanation;
+                        }
+                    } else {
+                        if (qDiv) qDiv.classList.add('incorrect-flash');
+                        if (fb) {
+                            fb.classList.add('show', 'incorrect');
+                            const correctLetter = String.fromCharCode(65 + q.correct);
+                            if (fbText) fbText.textContent = `❌ Incorrect. Correct: ${correctLetter}. ${q.options[q.correct]}`;
+                            if (fbExplanation) fbExplanation.innerHTML = ' ' + q.explanation;
+                        }
+                    }
+                }
+            });
+
+            // Update scores
+            document.getElementById('liveScore').textContent = score;
+            document.getElementById('liveScore2').textContent = score;
+
+            // Show modal
+            const percentage = Math.round((score / total) * 100);
+            document.getElementById('finalScore').textContent = `${score} / ${total}`;
+            document.getElementById('finalPercentage').textContent = `${percentage}%`;
+            let msg = '';
+            if (percentage >= 90) msg = '🌟 Excellent! You have a great command of modal verbs and collocations!';
+            else if (percentage >= 70) msg = '👍 Good job! Review the explanations to improve further.';
+            else if (percentage >= 50) msg = '📚 You\'re on the right track. Study the material and try again.';
+            else msg = '💪 Keep practicing! Review the grammar guides and retake the exam.';
+            document.getElementById('finalMsg').textContent = msg;
+            document.getElementById('resultModal').classList.add('active');
+
+            // Scroll to top to see results
+            document.querySelector('.exam-header').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').classList.remove('active');
+        }
+
+        function resetExam() {
+            // Clear all radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            // Clear all flashes
+            document.querySelectorAll('.question').forEach(qDiv => {
+                qDiv.classList.remove('correct-flash', 'incorrect-flash');
+            });
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.classList.remove('show', 'correct', 'incorrect');
+            });
+            document.querySelectorAll('.fill-blank').forEach(blank => {
+                blank.classList.remove('correct-blank', 'incorrect-blank');
+            });
+            // Reset scores
+            document.getElementById('liveScore').textContent = '0';
+            document.getElementById('liveScore2').textContent = '0';
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========== INIT ==========
+        renderAllQuestions();
+
+        // Close modal on overlay click
+        document.getElementById('resultModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Keyboard shortcut: Ctrl+Enter to submit
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                submitExam();
+            }
+        });
+
+        console.log('📝 Modal Verbs & Collocations Exam ready!');
+        console.log('   - 40 questions across 6 sections');
+        console.log('   - Click "Submit Exam" to see your score');
+        console.log('   - Press Ctrl+Enter to submit quickly');
+        console.log('   - Review explanations for each answer');
+    </script>
+</body>
+</html>
